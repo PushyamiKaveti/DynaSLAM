@@ -10,6 +10,8 @@ MESSAGE("Build type: " ${CMAKE_BUILD_TYPE})
 
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS}  -Wall  -O3 -march=native ")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall   -O3 -march=native")
+# This is required if opencv is built from source locally
+SET(OpenCV_DIR "/home/auv/software/opencv/build")
 
 # set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS}  -Wall  -O0 -march=native ")
 # set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall   -O0 -march=native")
@@ -32,36 +34,29 @@ endif()
 
 LIST(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake_modules)
 
-message("PROJECT_SOURCE_DIR: " ${OpenCV_DIR})
-find_package(OpenCV 2.4.11 QUIET)
-if(NOT OpenCV_FOUND)
-    message("OpenCV > 2.4.11 not found.")
-    find_package(OpenCV 3.0 QUIET)
-    if(NOT OpenCV_FOUND)
-        message(FATAL_ERROR "OpenCV > 3.0 not found.")
-    endif()
+set(Python_ADDITIONAL_VERSIONS "2.7")
+#This is to avoid detecting python 3
+find_package(PythonLibs 2.7 EXACT REQUIRED)
+if (NOT PythonLibs_FOUND)
+    message(FATAL_ERROR "PYTHON LIBS not found.")
+else()
+    message("PYTHON LIBS were found!")
+    message("PYTHON LIBS DIRECTORY: " ${PYTHON_LIBRARY} ${PYTHON_INCLUDE_DIRS})
 endif()
 
-#find_package(OpenCV 3.0 QUIET)
-#if(NOT OpenCV_FOUND)
-#   find_package(OpenCV 2.4.3 QUIET)
-#   if(NOT OpenCV_FOUND)
-#      message(FATAL_ERROR "OpenCV > 2.4.3 not found.")
-#   endif()
-#endif()
+message("PROJECT_SOURCE_DIR: " ${OpenCV_DIR})
+find_package(OpenCV 3.0 QUIET)
+if(NOT OpenCV_FOUND)
+    find_package(OpenCV 2.4 QUIET)
+    if(NOT OpenCV_FOUND)
+        message(FATAL_ERROR "OpenCV > 2.4.x not found.")
+    endif()
+endif()
 
 find_package(Qt5Widgets REQUIRED)
 find_package(Qt5Concurrent REQUIRED)
 find_package(Qt5OpenGL REQUIRED)
 find_package(Qt5Test REQUIRED)
-
-find_package(PythonLibs REQUIRED)
-if (NOT PythonLibs_FOUND)
-    message(FATAL_ERROR "PYTHON LIBS not found.")
-else()
-    message("PYTHON LIBS were found!")
-    message("PYTHON LIBS DIRECTORY: " ${PYTHON_LIBRARY})
-endif()
 
 find_package(Boost REQUIRED COMPONENTS thread)
 if(Boost_FOUND)
@@ -81,8 +76,9 @@ ${PROJECT_SOURCE_DIR}
 ${PROJECT_SOURCE_DIR}/include
 ${EIGEN3_INCLUDE_DIR}
 ${Pangolin_INCLUDE_DIRS}
+${PYTHON_INCLUDE_DIRS}
 /usr/include/python2.7/
-/usr/lib/python2.7/dist-packages/numpy/core/include/numpy/
+#/usr/lib/python2.7/dist-packages/numpy/core/include/numpy/
 ${Boost_INCLUDE_DIRS}
 )
 message("PROJECT_SOURCE_DIR: " ${PROJECT_SOURCE_DIR})
@@ -146,8 +142,4 @@ target_link_libraries(mono_tum ${PROJECT_NAME})
 add_executable(mono_kitti
 Examples/Monocular/mono_kitti.cc)
 target_link_libraries(mono_kitti ${PROJECT_NAME})
-
-add_executable(mono_carla
-Examples/Monocular/mono_carla.cc)
-target_link_libraries(mono_carla ${PROJECT_NAME})
 
