@@ -33,7 +33,7 @@ endif()
 LIST(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake_modules)
 
 message("PROJECT_SOURCE_DIR: " ${OpenCV_DIR})
-find_package(OpenCV 2.4.11 QUIET)
+find_package(OpenCV 3.0 REQUIRED)
 if(NOT OpenCV_FOUND)
     message("OpenCV > 2.4.11 not found.")
     find_package(OpenCV 3.0 QUIET)
@@ -55,7 +55,8 @@ find_package(Qt5Concurrent REQUIRED)
 find_package(Qt5OpenGL REQUIRED)
 find_package(Qt5Test REQUIRED)
 
-find_package(PythonLibs REQUIRED)
+set(Python_ADDITIONAL_VERSIONS "2.7")
+find_package(PythonLibs 2.7 EXACT REQUIRED)
 if (NOT PythonLibs_FOUND)
     message(FATAL_ERROR "PYTHON LIBS not found.")
 else()
@@ -80,9 +81,9 @@ include_directories(
 ${PROJECT_SOURCE_DIR}
 ${PROJECT_SOURCE_DIR}/include
 ${EIGEN3_INCLUDE_DIR}
-${Pangolin_INCLUDE_DIRS}
+${Pangolin_INCLUDE_DIRS} ${PYTHON_INCLUDE_DIRS}
 /usr/include/python2.7/
-/usr/lib/python2.7/dist-packages/numpy/core/include/numpy/
+#/usr/lib/python2.7/dist-packages/numpy/core/include/numpy/
 ${Boost_INCLUDE_DIRS}
 )
 message("PROJECT_SOURCE_DIR: " ${PROJECT_SOURCE_DIR})
@@ -147,7 +148,4 @@ add_executable(mono_kitti
 Examples/Monocular/mono_kitti.cc)
 target_link_libraries(mono_kitti ${PROJECT_NAME})
 
-add_executable(mono_carla
-Examples/Monocular/mono_carla.cc)
-target_link_libraries(mono_carla ${PROJECT_NAME})
 

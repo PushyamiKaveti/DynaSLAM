@@ -3,7 +3,7 @@ echo "Configuring and building Thirdparty/DBoW2 ..."
 cd Thirdparty/DBoW2
 mkdir build
 cd build
-cmake .. -DCMAKE_BUILD_TYPE=Release
+cmake .. -DOpenCV_DIR=/home/auv/software/opencv/build -DCMAKE_BUILD_TYPE=Debug
 make -j
 
 cd ../../g2o
@@ -12,7 +12,7 @@ echo "Configuring and building Thirdparty/g2o ..."
 
 mkdir build
 cd build
-cmake .. -DCMAKE_BUILD_TYPE=Release
+cmake .. -DOpenCV_DIR=/home/auv/software/opencv/build -DCMAKE_BUILD_TYPE=Release
 make -j
 
 cd ../../../
@@ -27,5 +27,5 @@ echo "Configuring and building DynaSLAM ..."
 
 mkdir build
 cd build
-cmake .. -DCMAKE_BUILD_TYPE=Release
+cmake .. -DOpenCV_DIR=/home/auv/software/opencv/build -DCMAKE_BUILD_TYPE=Debug
 make -j

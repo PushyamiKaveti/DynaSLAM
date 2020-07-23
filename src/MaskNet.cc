@@ -74,6 +74,7 @@ cv::Mat SegmentDynObject::GetSegmentation(cv::Mat &image,std::string dir, std::s
                     mkdir(str.c_str(), S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
                 }
             }
+
             cv::imwrite(dir+"/"+name,seg);
         }
     }
