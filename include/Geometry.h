@@ -75,6 +75,7 @@ private:
     DataBase mDB;
 
     cv::Mat vAllPixels;
+    int mWidth, mHeight;
 
     bool IsInFrame(const float &x, const float &y, const ORB_SLAM2::Frame &Frame);
     bool IsInImage(const float &x, const float &y, const cv::Mat image);
@@ -82,6 +83,7 @@ private:
 
 public:
     Geometry();
+    Geometry(int width, int height);
     ~Geometry() = default;
     void GeometricModelCorrection(const ORB_SLAM2::Frame &currentFrame, cv::Mat &imDepth, cv::Mat &mask);
     void InpaintFrames(const ORB_SLAM2::Frame &currentFrame, cv::Mat &imGray, cv::Mat &imDepth, cv::Mat &imRGB, cv::Mat &mask);

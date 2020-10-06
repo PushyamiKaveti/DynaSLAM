@@ -26,6 +26,20 @@ Geometry::Geometry()
     }
 }
 
+Geometry::Geometry(int width, int height){
+    mHeight = height;
+    mWidth = width;
+    vAllPixels = cv::Mat(width*height,2,CV_32F);
+    int m(0);
+    for (int i(0); i < width; i++){
+        for (int j(0); j < height; j++){
+            vAllPixels.at<float>(m,0) = i;
+            vAllPixels.at<float>(m,1) = j;
+            m++;
+        }
+    }
+}
+
 void Geometry::GeometricModelCorrection(const ORB_SLAM2::Frame &currentFrame,
                                         cv::Mat &imDepth, cv::Mat &mask){
     if(currentFrame.mTcw.empty()){
@@ -392,7 +406,7 @@ vector<Geometry::DynKeyPoint> Geometry::ExtractDynPoints(const vector<ORB_SLAM2:
 
 cv::Mat Geometry::DepthRegionGrowing(const vector<DynKeyPoint> &vDynPoints,const cv::Mat &imDepth){
 
-    cv::Mat maskG = cv::Mat::zeros(480,640,CV_32F);
+    cv::Mat maskG = cv::Mat::zeros(mHeight,mWidth,CV_32F);
 
     if (!vDynPoints.empty())
     {
@@ -421,7 +435,7 @@ cv::Mat Geometry::DepthRegionGrowing(const vector<DynKeyPoint> &vDynPoints,const
         maskG.cv::Mat::convertTo(maskG,CV_8U);
     }
 
-    cv::Mat _maskG = cv::Mat::ones(480,640,CV_8U);
+    cv::Mat _maskG = cv::Mat::ones(mHeight,mWidth,CV_8U);
     maskG = _maskG - maskG;
 
     return maskG;
@@ -473,11 +487,11 @@ void Geometry::FillRGBD(const ORB_SLAM2::Frame &currentFrame,cv::Mat &mask,cv::M
 
         ORB_SLAM2::Frame refFrame = mDB.mvDataBase[i];
 
-        cv::Mat vPixels(640*480,2,CV_32F);
-        cv::Mat mDepth(640*480,1,CV_32F);
+        cv::Mat vPixels(mWidth*mHeight,2,CV_32F);
+        cv::Mat mDepth(mWidth*mHeight,1,CV_32F);
 
         int n(0);
-        for (int j(0); j < 640*480; j++){
+        for (int j(0); j < mWidth*mHeight; j++){
             int x = (int)vAllPixels.at<float>(j,0);
             int y = (int)vAllPixels.at<float>(j,1);
             if ((int)refFrame.mImMask.at<uchar>(y,x) == 1){
@@ -691,11 +705,11 @@ void Geometry::FillRGBD(const ORB_SLAM2::Frame &currentFrame,cv::Mat &mask,cv::M
         cv::Mat imG = bgr[1];
         cv::Mat imB = bgr[0];
 
-        cv::Mat vPixels(640*480,2,CV_32F);
-        cv::Mat mDepth(640*480,1,CV_32F);
+        cv::Mat vPixels(mWidth*mHeight,2,CV_32F);
+        cv::Mat mDepth(mWidth*mHeight,1,CV_32F);
 
         int n(0);
-        for (int j(0); j < 640*480; j++){
+        for (int j(0); j < mWidth*mHeight; j++){
             int x = (int)vAllPixels.at<float>(j,0);
             int y = (int)vAllPixels.at<float>(j,1);
             if ((int)refFrame.mImMask.at<uchar>(y,x) == 1){

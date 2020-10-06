@@ -59,13 +59,15 @@ public:
     // Input image: RGB (CV_8UC3) or grayscale (CV_8U). RGB is converted to grayscale.
     // Input depthmap: Float (CV_32F).
     // Returns the camera pose (empty if tracking fails).
-    cv::Mat TrackRGBD(const cv::Mat &im, const cv::Mat &depthmap, cv::Mat &mask, const double &timestamp, cv::Mat &imRGBOut, cv::Mat &imDOut, cv::Mat &maskOut);
+    cv::Mat
+    TrackRGBD(const cv::Mat &im, const cv::Mat &depthmap, cv::Mat &mask, const double &timestamp, cv::Mat &imRGBOut,
+              cv::Mat &imDOut, cv::Mat &maskOut, string imgId);
 
     // Process the given rgbd frame. Depthmap must be registered to the RGB frame.
     // Input image: RGB (CV_8UC3) or grayscale (CV_8U). RGB is converted to grayscale.
     // Input depthmap: Float (CV_32F).
     // Returns the camera pose (empty if tracking fails).
-    cv::Mat TrackRGBD(const cv::Mat &im, const cv::Mat &depthmap, cv::Mat &mask, const double &timestamp);
+    cv::Mat TrackRGBD(const cv::Mat &im, const cv::Mat &depthmap, cv::Mat &mask, const double &timestamp, string imgId);
 
 
     // Proccess the given monocular frame

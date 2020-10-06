@@ -65,7 +65,7 @@ void Viewer::Run()
     // Define Camera Render Object (for view / scene browsing)
     pangolin::OpenGlRenderState s_cam(
                 pangolin::ProjectionMatrix(1024,768,mViewpointF,mViewpointF,512,389,0.1,1000),
-                pangolin::ModelViewLookAt(mViewpointX,mViewpointY,mViewpointZ, 0,0,0,0.0,-1.0, 0.0)
+                pangolin::ModelViewLookAt(mViewpointX,mViewpointY,mViewpointZ, 0,0,0,0.0,0.0, 1.0)
                 );
 
     // Add named OpenGL viewport to window and provide 3D Handler
@@ -123,7 +123,11 @@ void Viewer::Run()
 
         pangolin::FinishFrame();
 
-        cv::Mat im = mpFrameDrawer->DrawFrame();
+        string imgname;
+        cv::Mat im = mpFrameDrawer->DrawFrame(imgname);
+        //cout<<imgname<<endl;
+        d_cam.SaveOnRender(imgname);
+        //cv::imwrite("frames/"+imgname, im);
         cv::imshow("DynaSLAM: Current Frame",im);
         cv::waitKey(mT);
 

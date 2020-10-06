@@ -35,7 +35,7 @@ FrameDrawer::FrameDrawer(Map* pMap):mpMap(pMap)
     mIm = cv::Mat(480,640,CV_8UC3, cv::Scalar(0,0,0));
 }
 
-cv::Mat FrameDrawer::DrawFrame()
+cv::Mat FrameDrawer::DrawFrame(string &imgId)
 {
     cv::Mat im;
     vector<cv::KeyPoint> vIniKeys; // Initialization: KeyPoints in reference frame
@@ -52,7 +52,8 @@ cv::Mat FrameDrawer::DrawFrame()
             mState=Tracking::NO_IMAGES_YET;
 
         mIm.copyTo(im);
-
+        //pushyami
+        imgId = mImId;
         if(mState==Tracking::NOT_INITIALIZED)
         {
             vCurrentKeys = mvCurrentKeys;

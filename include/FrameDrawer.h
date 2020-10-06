@@ -46,7 +46,7 @@ public:
     void Update(Tracking *pTracker);
 
     // Draw last processed frame.
-    cv::Mat DrawFrame();
+    cv::Mat DrawFrame(string &imgId);
 
 protected:
 
@@ -54,6 +54,8 @@ protected:
 
     // Info of the frame to be drawn
     cv::Mat mIm;
+    //pushyami
+    string mImId;
     int N;
     vector<cv::KeyPoint> mvCurrentKeys;
     vector<bool> mvbMap, mvbVO;

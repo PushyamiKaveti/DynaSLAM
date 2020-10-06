@@ -96,6 +96,9 @@ int main(int argc, char **argv)
         cv::Mat imRGB, imD;
         cv::Mat imRGBOut, imDOut,maskOut;
 
+    cv::FileStorage fSettings(argv[2],cv::FileStorage::READ);
+    int width = fSettings["Camera.width"];
+    int height = fSettings["Camera.height"];
     for(int ni=0; ni<nImages; ni++)
     {
         // Read image and depthmap from file
@@ -118,7 +121,8 @@ int main(int argc, char **argv)
 #endif
 
         // Segment out the images
-        cv::Mat mask = cv::Mat::ones(480,640,CV_8U);
+
+        cv::Mat mask = cv::Mat::ones(height,width,CV_8U);
         if (argc == 6 || argc == 7)
         {
             cv::Mat maskRCNN;
@@ -129,8 +133,8 @@ int main(int argc, char **argv)
         }
 
         // Pass the image to the SLAM system
-        if (argc == 7){SLAM.TrackRGBD(imRGB,imD,mask,tframe,imRGBOut,imDOut,maskOut);}
-        else {SLAM.TrackRGBD(imRGB,imD,mask,tframe);}
+        if (argc == 7){ SLAM.TrackRGBD(imRGB, imD, mask, tframe, imRGBOut, imDOut, maskOut, vstrImageFilenamesRGB[ni]);}
+        else { SLAM.TrackRGBD(imRGB, imD, mask, tframe, vstrImageFilenamesRGB[ni]);}
 
 #ifdef COMPILEDWITHC11
         std::chrono::steady_clock::time_point t2 = std::chrono::steady_clock::now();

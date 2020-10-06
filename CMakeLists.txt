@@ -42,14 +42,6 @@ if(NOT OpenCV_FOUND)
     endif()
 endif()
 
-#find_package(OpenCV 3.0 QUIET)
-#if(NOT OpenCV_FOUND)
-#   find_package(OpenCV 2.4.3 QUIET)
-#   if(NOT OpenCV_FOUND)
-#      message(FATAL_ERROR "OpenCV > 2.4.3 not found.")
-#   endif()
-#endif()
-
 find_package(Qt5Widgets REQUIRED)
 find_package(Qt5Concurrent REQUIRED)
 find_package(Qt5OpenGL REQUIRED)
@@ -131,6 +123,9 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/Examples/RGB-D)
 add_executable(rgbd_tum
 Examples/RGB-D/rgbd_tum.cc)
 target_link_libraries(rgbd_tum ${PROJECT_NAME})
+
+add_executable(genmask Examples/RGB-D/genMasks.cpp)
+target_link_libraries(genmask ${PROJECT_NAME})
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/Examples/Stereo)
 

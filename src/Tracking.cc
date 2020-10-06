@@ -40,6 +40,9 @@ Tracking::Tracking(System *pSys, ORBVocabulary* pVoc, FrameDrawer *pFrameDrawer,
     // Load camera parameters from settings file
 
     cv::FileStorage fSettings(strSettingPath, cv::FileStorage::READ);
+    int width = fSettings["Camera.width"];
+    int height = fSettings["Camera.height"];
+    mGeometry = DynaSLAM::Geometry(width, height);
     float fx = fSettings["Camera.fx"];
     float fy = fSettings["Camera.fy"];
     float cx = fSettings["Camera.cx"];
@@ -205,13 +208,14 @@ cv::Mat Tracking::GrabImageStereo(const cv::Mat &imRectLeft, const cv::Mat &imRe
 
 cv::Mat Tracking::GrabImageRGBD(const cv::Mat &imRGB,const cv::Mat &imD, cv::Mat &mask,
                                 const double &timestamp, cv::Mat &imRGBOut,
-                                cv::Mat &imDOut, cv::Mat &maskOut)
+                                cv::Mat &imDOut, cv::Mat &maskOut, string imgId)
 {
     mImGray = imRGB;
     cv::Mat imDepth = imD;
     cv::Mat imMask = mask;
     cv::Mat _imRGB = imRGB;
-
+    //pushyami
+    mImId = imgId;
     if(mImGray.channels()==3)
     {
         if(mbRGB)
@@ -262,12 +266,13 @@ cv::Mat Tracking::GrabImageRGBD(const cv::Mat &imRGB,const cv::Mat &imD, cv::Mat
 }
 
 cv::Mat Tracking::GrabImageRGBD(const cv::Mat &imRGB,const cv::Mat &imD, cv::Mat &mask,
-                                const double &timestamp)
+                                const double &timestamp, string imgId)
 {
     mImGray = imRGB;
     cv::Mat imDepth = imD;
     cv::Mat imMask = mask;
-
+    //pushyami
+    mImId = imgId;
     if(mImGray.channels()==3)
     {
         if(mbRGB)
